@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    // Language supports.
+    "dart-code.dart-code",
+    "dart-code.flutter",
+
+    // Configuration files supports.
+    "redhat.vscode-yaml",
+
+    // Auto format on save.
+    "esbenp.prettier-vscode"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@cellawiki/open-source-monorepo",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "fmt": "prettier --write .",
+    "check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "prettier-plugin-sh": "^0.14.0"
+  }
+}
