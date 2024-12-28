@@ -9,6 +9,10 @@
 *.iws
 *.sw*
 
+# Child repo manifests.
+*/license
+*/contributors.yaml
+
 # Node dependencies and build artifacts.
 node_modules/
 
