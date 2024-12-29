@@ -1,3 +1,8 @@
+## 0.1.1
+
+- Rename `example.dart` to adjust the pub.dev specifications.
+- Edit manifest description to apply the pub.dev specifications.
+
 ## 0.1.0
 
 - APIs to get all linter options from https://dart.dev/tools/linter-rules.
