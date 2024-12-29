@@ -10,6 +10,7 @@
 *.sw*
 
 # Child repo manifests.
+*/.pubignore
 */license
 */contributors.yaml
 

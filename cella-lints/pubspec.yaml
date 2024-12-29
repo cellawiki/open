@@ -1,6 +1,7 @@
 name: cella_lints
 description: Shared linter options and the tool to sync from the Docs.
-version: 1.0.0
+repository: https://github.com/cellawiki/open/tree/main/cella-lints
+version: 0.1.0
 resolution: workspace
 environment: {sdk: ^3.6.0}
 

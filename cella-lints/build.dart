@@ -21,13 +21,24 @@ void main() {
   if (raw is! Map) throw Exception('invalid structure: $path');
   final handler = <String, dynamic>{};
   for (final username in raw.keys) {
+    // Copy contributor of such repo only.
     if (username is! String) continue;
     final contributor = raw[username];
     if (contributor is! Map) continue;
     final repos = contributor['repo'];
     if (repos is! List<dynamic>) continue;
-    if (repos.contains(repoName)) handler[username] = contributor;
+    if (repos.contains(repoName)) {
+      handler[username] = {...contributor}..remove('repo');
+    }
   }
   final editor = YamlEditor('')..update([], handler);
   File(join(root, contributorsFilename)).writeAsStringSync('$editor\n');
+
+  // Auto generate .pubignore.
+  final content = [
+    contributorsFilename.toLowerCase(),
+    licenseFilename.toLowerCase(),
+    'build.dart',
+  ].map((item) => '!$item').join('\n');
+  File(join(root, '.pubignore')).writeAsStringSync('$content\n');
 }
