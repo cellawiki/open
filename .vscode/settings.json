@@ -18,6 +18,13 @@
   "explorer.fileNesting.patterns": {
     "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml",
     "pubspec.yaml": "pubspec.lock",
-    "tsconfig.json": "tsconfig.*.json"
+    "tsconfig.json": "tsconfig.*.json",
+    "*.js": "${capture}.js.map",
+    "*.cjs": "${capture}.cjs.map"
+  },
+
+  // Necessary file type specification.
+  "files.associations": {
+    "*.cjs.map": "json"
   }
 }

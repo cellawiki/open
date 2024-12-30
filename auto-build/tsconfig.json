@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    // Some rollup plugins are incompatible with nodenext schema.
+    "module": "ESNext",
+    "moduleResolution": "node"
+  },
+  "extends": "./tsconfig.node.json",
+  "include": ["src/**/*.ts", "test/**/*.ts", "build.ts"]
+}

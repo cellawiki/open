@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    // Module resolution and emit.
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "noEmit": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+
+    // Strict mode.
+    "strict": true,
+    "alwaysStrict": true,
+    "strictBindCallApply": true,
+    "strictBuiltinIteratorReturn": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true
+  }
+}

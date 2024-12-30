@@ -16,6 +16,7 @@
 
 # Node dependencies and build artifacts.
 node_modules/
+out/
 
 # Dart and Flutter dependencies and workspace.
 .dart_tool/

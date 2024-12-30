@@ -1,0 +1,29 @@
+{
+  "name": "@cellawiki/auto-build",
+  "description": "Build ts library according to auto-detected settings.",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "src": "./src/index.ts",
+      "types": "./out/index.d.ts",
+      "import": "./out/index.js",
+      "require": "./out/index.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vitest",
+    "test": "vitest run",
+    "build": "vite-node build.ts"
+  },
+  "dependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "chalk": "^5.4.1",
+    "dts-bundle-generator": "^9.5.1",
+    "rollup": "^4.29.1"
+  },
+  "devDependencies": {
+    "tslib": "^2.8.1"
+  }
+}
