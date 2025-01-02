@@ -3,4 +3,5 @@ aprosail:
   mail: aprosail@outlook.com
   repo:
     - root
+    - auto-build
     - cella-lints

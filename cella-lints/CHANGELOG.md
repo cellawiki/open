@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Optimize `build.dart` to support string as child repo config.
+- Avoid unnecessary pub unignore of `build.dart`.
+
 ## 0.1.1
 
 - Rename `example.dart` to adjust the pub.dev specifications.

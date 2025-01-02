@@ -21,7 +21,8 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "chalk": "^5.4.1",
     "dts-bundle-generator": "^9.5.1",
-    "rollup": "^4.29.1"
+    "rollup": "^4.29.1",
+    "yaml": "^2.6.1"
   },
   "devDependencies": {
     "tslib": "^2.8.1"

@@ -2,18 +2,22 @@ import terser from "@rollup/plugin-terser"
 import typescript from "@rollup/plugin-typescript"
 import chalk, {ChalkInstance} from "chalk"
 import {generateDtsBundle} from "dts-bundle-generator"
-import {writeFileSync} from "node:fs"
-import {join, parse, sep} from "node:path"
+import {copyFileSync, readFileSync, writeFileSync} from "node:fs"
+import {basename, dirname, join, parse, sep} from "node:path"
 import {OutputOptions, rollup, RollupBuild, RollupOptions} from "rollup"
+import * as yaml from "yaml"
 
-/** Shortcut of chalk colorization. */
+// Shortcut of chalk colorization.
 const output = chalk.dim.green("output")
+const sync = chalk.dim.green("sync")
 
 /** Format a path with colors that with dim base and colored name. */
 function formatPath(raw: string, color: ChalkInstance) {
   const path = parse(raw)
   const dim = chalk.dim
-  return `${dim(path.dir)}${dim(sep)}${color(path.base)}`
+  const dir = path.dir
+  if (dir === "") return color(path.base)
+  return `${dim(dir)}${dim(sep)}${color(path.base)}`
 }
 
 /**
@@ -28,6 +32,82 @@ function formatDuration(startTimestamp: number) {
   const ms = duration % 1000
   const s = (duration - ms) / 1000
   return `${chalk.cyan(s)} ${dim("s")} ${chalk.cyan(ms)} ${dim("ms")}`
+}
+
+interface DiffInfo {
+  common: string
+  from: string
+  to: string
+}
+
+/** Parse the difference information between the two path. */
+function diffPath(from: string, to: string): DiffInfo {
+  const fromParts = from.split(sep)
+  const toParts = to.split(sep)
+  for (let i = 0; i < Math.max(fromParts.length, toParts.length); i++) {
+    if (fromParts[i] !== toParts[i]) {
+      return {
+        common: fromParts.slice(0, i).join(sep),
+        from: fromParts.slice(i).join(sep),
+        to: toParts.slice(i).join(sep),
+      }
+    }
+  }
+  return {common: from, from: "", to: ""}
+}
+
+function formatMove(from: string, to: string, color: ChalkInstance) {
+  const diff = diffPath(from, to)
+  if (from === "") from = "."
+  if (to === "") to = "."
+  if (diff.from === "." && diff.to === ".") {
+    return `${formatPath(diff.common, color)} ${chalk.dim("(self)")}`
+  }
+  return [
+    chalk.dim(diff.common),
+    chalk.dim(" ("),
+    formatPath(diff.from, color.dim),
+    chalk.dim(" => "),
+    formatPath(diff.to, color),
+    chalk.dim(")"),
+  ].join("")
+}
+
+/**
+ * Sync license file from the monorepo to current child repo.
+ * @param root the folder where "LICENSE" of current child repo locates.
+ * @param monorepo the folder where "LICENSE" of the monorepo locates.
+ */
+function syncLicense(root: string, monorepo: string) {
+  const filename = "license".toUpperCase()
+  const src = join(monorepo, filename)
+  const out = join(root, filename)
+  copyFileSync(src, out)
+  console.log(`${sync} ${formatMove(src, out, chalk.magenta)}`)
+}
+
+/**
+ * Sync all related contributors from the monorepo root to current child repo.
+ * @param root the folder where "CONTRIBUTORS.yaml" of current repo locates.
+ * @param monorepo the folder where "CONTRIBUTORS.yaml" of monorepo locates.
+ */
+function syncContributors(root: string, monorepo: string) {
+  const filename = `${"contributors".toUpperCase()}.yaml`
+  const name = basename(root)
+  const src = join(monorepo, filename)
+  const raw = yaml.parse(readFileSync(src).toString())
+  const handler: {[key: string]: any} = {}
+  for (const [author, data] of Object.entries(raw)) {
+    if (!data) continue
+    const repo = (data as any)["repo"]
+    if (typeof repo === name || (Array.isArray(repo) && repo.includes(name))) {
+      handler[author] = {...data, repo: undefined}
+    }
+  }
+  const content = yaml.stringify(handler)
+  const out = join(root, filename)
+  writeFileSync(out, content)
+  console.log(`${sync} ${formatMove(src, out, chalk.magenta)}`)
 }
 
 /**
@@ -111,13 +191,13 @@ async function buildAsManifest(root: string): Promise<void> {
   for (const [key, value] of Object.entries(exports)) {
     // Validate values.
     if (typeof value !== "object") continue
-    const src = (value as {[k: string]: any})["src"]
+    const src = (value as any)["src"]
     if (typeof src !== "string") continue
 
     // Build libraries.
     const options: OutputOptions[] = []
-    const i = (value as {[k: string]: any})["import"]
-    const r = (value as {[k: string]: any})["require"]
+    const i = (value as any)["import"]
+    const r = (value as any)["require"]
     if (i) options.push({file: join(root, i), format: "esm", sourcemap: true})
     if (r) options.push({file: join(root, r), format: "cjs", sourcemap: true})
     const input = join(root, src)
@@ -125,7 +205,7 @@ async function buildAsManifest(root: string): Promise<void> {
     tasks.push(buildRollup({plugins, external, input, output: options}))
 
     // Build declarations.
-    const types = (value as {[k: string]: any})["types"]
+    const types = (value as any)["types"]
     if (!types) continue
     const task = (async () => {
       const content = generateDtsBundle([{filePath: join(root, src)}])
@@ -143,11 +223,14 @@ async function buildAsManifest(root: string): Promise<void> {
 async function main() {
   // Setup time counter and init basic info.
   const root = import.meta.dirname
+  const monorepo = dirname(root)
   const counter = new Date().getTime()
   console.log(chalk.blue("generating output..."))
 
   // Build the output.
   await buildAsManifest(root)
+  syncLicense(root, monorepo)
+  syncContributors(root, monorepo)
 
   // Log the counter when finished.
   const duration = formatDuration(counter)
