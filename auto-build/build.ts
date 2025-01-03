@@ -180,7 +180,7 @@ async function buildRollup(options: RollupOptions): Promise<void> {
  * }
  * ```
  *
- * @param root where the "package.json" locates.
+ * @param root the folder where the "package.json" locates.
  */
 async function buildAsManifest(root: string): Promise<void> {
   const {exports} = await import(`${root}/package.json`)

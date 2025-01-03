@@ -19,6 +19,7 @@
     "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml",
     "pubspec.yaml": "pubspec.lock",
     "tsconfig.json": "tsconfig.*.json",
+    "*.ts": "${capture}.test.ts",
     "*.js": "${capture}.js.map",
     "*.cjs": "${capture}.cjs.map"
   },
