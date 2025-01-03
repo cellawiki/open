@@ -1,4 +1,4 @@
-import 'package:cella_lints/src/utils.dart';
+import 'package:cella_lints/cella_lints.dart';
 import 'package:test/test.dart';
 
 void main() {

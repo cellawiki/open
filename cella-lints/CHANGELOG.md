@@ -2,6 +2,7 @@
 
 - Optimize `build.dart` to support string as child repo config.
 - Avoid unnecessary pub unignore of `build.dart`.
+- Colorful output on terminal, including examples and the build script.
 
 ## 0.1.1
 

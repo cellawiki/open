@@ -1,4 +1,4 @@
-import 'package:cella_lints/src/utils.dart';
+import 'package:cella_lints/src/format.dart';
 import 'package:html/dom.dart';
 
 /// A linter rule defined in the Dart's API documentation
