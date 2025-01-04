@@ -100,10 +100,10 @@ typedef TerminalStyler = String Function(String raw);
 extension FormatPath on String {
   /// Colorize the path, especially for command-line output.
   String formatPath({TerminalStyler? style}) {
-    final dirname = path.dirname(this);
+    final dir = path.dirname(this);
     final basename = path.basename(this);
-    return '${dirname.isEmpty ? '' : '$dirname${path.separator}'.dim}'
-        '${style == null ? basename : style(basename)}';
+    final prefix = dir.isEmpty || dir == '.' ? '' : '$dir${path.separator}'.dim;
+    return '$prefix${style == null ? basename : style(basename)}';
   }
 
   /// If the path is empty, return `.` instead.
@@ -121,17 +121,19 @@ class PathMove {
   factory PathMove.from(String from, String to) {
     final fromPath = from.split(path.separator);
     final toPath = to.split(path.separator);
-    for (int i = 0; i < max(fromPath.length, toPath.length); i++) {
-      if (fromPath[i] == toPath[i]) continue;
-      final from = fromPath.sublist(i).join(path.separator);
-      final to = toPath.sublist(i).join(path.separator);
-      return PathMove(
-        common: fromPath.sublist(0, i).join(path.separator).resolveEmpty,
-        from: from.isEmpty ? null : from,
-        to: to.isEmpty ? null : to,
-      );
+
+    int index = 0;
+    while (index < min(fromPath.length, toPath.length)) {
+      if (fromPath[index] != toPath[index]) break;
+      index++;
     }
-    return PathMove(common: from.resolveEmpty);
+    final fromRest = fromPath.sublist(index);
+    final toRest = toPath.sublist(index);
+    return PathMove(
+      common: fromPath.sublist(0, index).join(path.separator),
+      from: fromRest.isEmpty ? null : fromRest.join(path.separator),
+      to: toRest.isEmpty ? null : toRest.join(path.separator),
+    );
   }
 
   final String common;
@@ -142,8 +144,9 @@ class PathMove {
     if (from == to) return '${common.formatPath(style: style)} ${'(self)'.dim}';
     final a = from ?? '.';
     final b = to ?? '.';
-    return '${'$common ('.dim}${a.formatPath(style: style)} ${'=>'.dim} '
-        '${b.formatPath(style: style)}${')'.dim}';
+    final fromFormat = a.formatPath(style: (r) => (style?.call(r) ?? r).dim);
+    final toFormat = b.formatPath(style: style);
+    return '${'$common ('.dim}$fromFormat ${'=>'.dim} $toFormat${')'.dim}';
   }
 }
 

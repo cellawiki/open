@@ -21,3 +21,4 @@ out/
 # Dart and Flutter dependencies and workspace.
 .dart_tool/
 build/
+*/doc/

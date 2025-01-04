@@ -140,7 +140,7 @@ class Option {
     final contents = [
       name,
       if (hasFix) 'fix',
-      if (!status.isStable) status.name.toLowerCase(),
+      if (!status.isStable) status.name,
       for (final item in sets) item.name,
     ];
     return 'Option(${contents.join(', ')})';
@@ -154,8 +154,8 @@ enum Status {
   removed('Removed'),
   unreleased('Unreleased');
 
-  const Status(this.name);
-  final String name;
+  const Status(this.display);
+  final String display;
 
   bool get isStable => this == Status.stable;
 
@@ -181,7 +181,7 @@ enum Status {
     // Check whether the status name matched.
     final bare = text.removeParenthesis.trim();
     for (final status in values.toSet()..remove(stable)) {
-      if (status.name == bare) return status;
+      if (status.display == bare) return status;
     }
     return Status.stable;
   }

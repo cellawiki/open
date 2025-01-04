@@ -70,21 +70,21 @@ void main() {
   group('parse status', () {
     test('normal', () {
       for (final status in Status.values.toSet()..remove(Status.stable)) {
-        final element = Element.tag('em')..text = '(${status.name})';
+        final element = Element.tag('em')..text = '(${status.display})';
         expect(Status.parse(element), status);
       }
     });
 
     test('spaces', () {
       for (final status in Status.values.toSet()..remove(Status.stable)) {
-        final element = Element.tag('em')..text = ' ( ${status.name} ) ';
+        final element = Element.tag('em')..text = ' ( ${status.display} ) ';
         expect(Status.parse(element), status);
       }
     });
 
     test('no parenthesis', () {
       for (final status in Status.values.toSet()..remove(Status.stable)) {
-        final element = Element.tag('em')..text = status.name;
+        final element = Element.tag('em')..text = status.display;
         expect(Status.parse(element), Status.stable);
       }
     });
@@ -96,7 +96,7 @@ void main() {
 
     test('invalid element', () {
       for (final status in Status.values.toSet()..remove(Status.stable)) {
-        final element = Element.tag('code')..text = '(${status.name})';
+        final element = Element.tag('code')..text = '(${status.display})';
         expect(Status.parse(element), Status.stable);
       }
     });
