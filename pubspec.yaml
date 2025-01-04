@@ -4,4 +4,5 @@ publish_to: none
 environment: {sdk: ^3.6.0}
 
 workspace:
+  - cella-eco
   - cella-lints

@@ -4,4 +4,5 @@ aprosail:
   repo:
     - root
     - auto-build
+    - cella-eco
     - cella-lints
