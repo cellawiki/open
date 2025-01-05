@@ -163,3 +163,15 @@ void generatePubignore({
     '${pubignorePath.formatPath(style: (raw) => raw.blue)}',
   );
 }
+
+const manifestFilename = 'pubspec.yaml';
+
+/// Detect what child repos are defined in the monorepo's "pubspec.yaml".
+Iterable<String> detectWorkspace(String monorepo) {
+  final file = File(join(monorepo, manifestFilename));
+  final manifest = loadYaml(file.readAsStringSync());
+  if (manifest is! YamlMap) throw Exception('invalid manifest: $manifest');
+  final workspace = manifest['workspace'];
+  if (workspace is! YamlList) throw Exception('invalid workspace: $workspace');
+  return [for (final repo in workspace) repo.toString()];
+}
