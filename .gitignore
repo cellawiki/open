@@ -18,7 +18,7 @@
 node_modules/
 out/
 
-# Dart and Flutter dependencies and workspace.
+# Dart and Flutter dependencies and workspaces.
 .dart_tool/
 build/
 **/doc/api/

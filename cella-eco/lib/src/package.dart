@@ -31,7 +31,7 @@ void syncManifest({
   final monorepoRoot = monorepo ?? dirname(root);
   if (log) {
     final moveInfo = PathMove.from(monorepoRoot, root).format((r) => r.blue);
-    stdout.writeln('${'sync manifest'.blue}${':'.dim} ${moveInfo}');
+    stdout.writeln('${'sync manifest'.blue}${':'.dim} $moveInfo');
   }
 
   copyLicense(
