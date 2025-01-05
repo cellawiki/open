@@ -6,3 +6,9 @@ environment: {sdk: ^3.6.0}
 workspace:
   - cella-eco
   - cella-lints
+
+dev_dependencies:
+  args: ^2.6.0
+  cella_eco: ^0.1.0
+  cella_lints: ^0.1.2
+  path: ^1.9.1

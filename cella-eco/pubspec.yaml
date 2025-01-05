@@ -1,7 +1,7 @@
 name: cella_eco
 description: Monorepo helpers including syncing contributors and testing.
 repository: https://github.com/cellawiki/open/tree/main/cella-lints
-version: 0.0.0
+version: 0.1.0
 resolution: workspace
 environment: {sdk: ^3.6.0}
 
